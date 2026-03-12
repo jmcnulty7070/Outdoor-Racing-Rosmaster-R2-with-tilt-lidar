@@ -1,0 +1,8 @@
+frame_id: map
+base_frame_id: base_link
+resolution: 0.10
+sensor_model/max_range: 12.0
+sensor_model/hit: 0.7
+sensor_model/miss: 0.4
+sensor_model/min: 0.12
+sensor_model/max: 0.97

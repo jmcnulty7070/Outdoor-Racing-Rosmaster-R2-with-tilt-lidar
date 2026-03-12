@@ -1,0 +1,5 @@
+enable_topic: /auto_enable
+in_topic: /cmd_vel_auto_raw
+out_topic: /cmd_vel_auto
+rate_hz: 30.0
+publish_zero_when_disabled: true
