@@ -1,0 +1,27 @@
+<launch>
+  <arg name="start_driver" default="false"/>
+  <arg name="scan_topic" default="/scan"/>
+  <arg name="obstacle_scan_topic" default="/scan_obstacles"/>
+
+  <include file="$(find r2_tg30_race)/launch/tg30_bringup.launch">
+    <arg name="start_driver" value="$(arg start_driver)"/>
+    <arg name="scan_topic" value="$(arg scan_topic)"/>
+  </include>
+
+  <include file="$(find r2_tg30_race)/launch/scan_cleanup.launch">
+    <arg name="scan_in" value="$(arg scan_topic)"/>
+    <arg name="scan_obstacles" value="$(arg obstacle_scan_topic)"/>
+  </include>
+
+  <node pkg="slam_gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+    <remap from="scan" to="$(arg obstacle_scan_topic)"/>
+    <param name="base_frame" value="base_link"/>
+    <param name="odom_frame" value="odom"/>
+    <param name="map_update_interval" value="2.0"/>
+    <param name="maxRange" value="12.0"/>
+    <param name="maxUrange" value="10.0"/>
+    <param name="linearUpdate" value="0.20"/>
+    <param name="angularUpdate" value="0.10"/>
+    <param name="particles" value="30"/>
+  </node>
+</launch>

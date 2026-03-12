@@ -1,0 +1,10 @@
+scan_topic: /scan_obstacles
+cmd_topic: /ftg_cmd_vel
+danger_distance: 1.20
+stop_distance: 0.45
+front_angle_deg: 110.0
+bubble_radius_idx: 8
+gap_threshold: 1.20
+max_speed: 0.80
+min_speed: 0.18
+max_angular_z: 1.60
