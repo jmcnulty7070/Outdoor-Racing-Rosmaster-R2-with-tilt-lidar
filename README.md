@@ -300,6 +300,8 @@ This is a very good idea.
 
 A rosbag lets you replay the run later without driving the car again.
 
+Stop Mapping!!
+
 ## Terminal 5
 
 ```bash
