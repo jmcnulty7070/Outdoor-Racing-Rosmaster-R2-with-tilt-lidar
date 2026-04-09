@@ -9,6 +9,7 @@ It is written in simple language on purpose.
 This package is a **separate workspace**. It is made so you do **not** mess up your older ROS workspaces.
 
 ---
+<img width="1513" height="2017" alt="image" src="https://github.com/user-attachments/assets/1d39010a-185b-44f6-8fa5-59b21af234d8" />
 
 # 1. What this package does
 
