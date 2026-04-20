@@ -1,9 +1,0 @@
-lookahead_distance: 0.80
-base_speed: 0.70
-max_speed: 1.00
-min_speed: 0.20
-max_angular_z: 1.40
-goal_tolerance: 0.35
-path_topic: /race_path
-odom_topic: /odom
-cmd_topic: /pp_cmd_vel

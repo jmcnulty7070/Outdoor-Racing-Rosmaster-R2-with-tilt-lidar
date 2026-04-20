@@ -1,8 +1,0 @@
-<launch>
-  <arg name="cloud_topic" default="/scan_cloud"/>
-
-  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server" output="screen">
-    <rosparam command="load" file="$(find r2_tg30_race)/config/octomap.yaml" />
-    <remap from="cloud_in" to="$(arg cloud_topic)"/>
-  </node>
-</launch>

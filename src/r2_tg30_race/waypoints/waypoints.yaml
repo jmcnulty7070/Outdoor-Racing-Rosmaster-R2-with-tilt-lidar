@@ -1,7 +1,0 @@
-frame_id: map
-sample_distance: 0.40
-waypoints:
-  - {x: 0.0, y: 0.0, yaw: 0.0}
-  - {x: 1.0, y: 0.0, yaw: 0.0}
-  - {x: 2.0, y: 0.2, yaw: 0.1}
-  - {x: 3.0, y: 0.6, yaw: 0.2}
