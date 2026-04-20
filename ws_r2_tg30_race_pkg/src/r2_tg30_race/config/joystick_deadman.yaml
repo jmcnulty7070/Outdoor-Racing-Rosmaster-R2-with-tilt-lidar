@@ -1,5 +1,0 @@
-joy_topic: /joy
-enable_topic: /auto_enable
-deadman_button_index: 5
-publish_hz: 30.0
-joy_timeout: 0.75

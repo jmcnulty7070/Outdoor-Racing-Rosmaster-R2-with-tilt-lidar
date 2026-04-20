@@ -1,4 +1,0 @@
-<launch>
-  <node pkg="rviz" type="rviz" name="rviz_racing" output="screen"
-        args="-d $(find r2_tg30_race)/rviz/racing.rviz"/>
-</launch>
