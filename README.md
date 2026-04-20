@@ -1,5 +1,7 @@
 # ROSMASTER R2 TG30 Race Course README
 <img width="1513" height="2017" alt="image" src="https://github.com/user-attachments/assets/1d39010a-185b-44f6-8fa5-59b21af234d8" />
+# ROSMASTER R2 TG30 Race Course README
+
 This README matches the current state of this workspace as of `2026-04-20`.
 
 It is written for a real ROSMASTER R2 running ROS Melodic.
@@ -28,25 +30,20 @@ Main Yahboom packages used with it:
 
 ## 2. Main bringup idea
 
-Use this as the real-car base launch:
+Use this as the real-car bringup launch:
 
 ```bash
-roslaunch yahboomcar_bringup bringup.launch
+roslaunch yahboomcar_nav laser_bringup.launch
 ```
 
-That launch is the source for:
+That launch starts:
 
 - base driver
 - odometry
 - joystick
+- LiDAR driver
 - `robot_description`
 - `robot_state_publisher`
-
-Start the TG30 separately:
-
-```bash
-roslaunch r2_tg30_race tg30_bringup.launch start_driver:=true scan_topic:=/scan
-```
 
 Do not start two LiDAR drivers at the same time.
 
@@ -71,7 +68,7 @@ Current LiDAR assumptions:
 - about `6.0 in` above the rear axle center
 - pitched forward about `5 degrees`
 
-If `yahboomcar_bringup bringup.launch` is not running, you may be missing `base_link -> laser_link`.
+If `yahboomcar_nav laser_bringup.launch` is not running, you may be missing the base and LiDAR TF tree.
 
 ## 4. ROS version and Python
 
@@ -263,12 +260,7 @@ Recommended mapping startup:
 
 ```bash
 source ~/yahboomcar_ws/devel/setup.bash
-roslaunch yahboomcar_bringup bringup.launch
-```
-
-```bash
-source ~/yahboomcar_ws/devel/setup.bash
-roslaunch r2_tg30_race tg30_bringup.launch start_driver:=true scan_topic:=/scan
+roslaunch yahboomcar_nav laser_bringup.launch
 ```
 
 ```bash
@@ -390,12 +382,7 @@ Do not run Cartographer and AMCL at the same time on the real car. Cartographer 
 
 ```bash
 source ~/yahboomcar_ws/devel/setup.bash
-roslaunch yahboomcar_bringup bringup.launch
-```
-
-```bash
-source ~/yahboomcar_ws/devel/setup.bash
-roslaunch r2_tg30_race tg30_bringup.launch start_driver:=true scan_topic:=/scan
+roslaunch yahboomcar_nav laser_bringup.launch
 ```
 
 ```bash
@@ -420,12 +407,7 @@ Recommended startup:
 
 ```bash
 source ~/yahboomcar_ws/devel/setup.bash
-roslaunch yahboomcar_bringup bringup.launch
-```
-
-```bash
-source ~/yahboomcar_ws/devel/setup.bash
-roslaunch r2_tg30_race tg30_bringup.launch start_driver:=true scan_topic:=/scan
+roslaunch yahboomcar_nav laser_bringup.launch
 ```
 
 ```bash
@@ -592,9 +574,8 @@ This uses `/scan_cloud`.
 1. Stop racing, mapping, or localization launches
 2. Stop RViz
 3. Stop rosbag recording
-4. Stop `r2_tg30_race tg30_bringup.launch`
-5. Stop `yahboomcar_bringup bringup.launch`
-6. Stop `roscore` if you started it
+4. Stop `yahboomcar_nav laser_bringup.launch`
+5. Stop `roscore` if you started it
 
 ## 22. Troubleshooting
 
@@ -604,14 +585,14 @@ Fix:
 
 - check LiDAR cable and power
 - check TG30 port and baudrate
-- check that you started `tg30_bringup.launch` with `start_driver:=true`
+- check that you started `yahboomcar_nav laser_bringup.launch`
 
 ### Problem: `/joy` is missing
 
 Fix:
 
 - check joystick connection
-- check `yahboomcar_bringup bringup.launch`
+- check `yahboomcar_nav laser_bringup.launch`
 
 ### Problem: `/odom` is missing
 
@@ -660,55 +641,48 @@ Fix:
 
 Fix:
 
-- make sure `yahboomcar_bringup bringup.launch` is running
+- make sure `yahboomcar_nav laser_bringup.launch` is running
 - make sure `robot_state_publisher` is alive
-- do not expect `tg30_bringup.launch` to publish the LiDAR TF anymore
 
 ## 23. Common real workflow
 
-1. Bring up the base:
+1. Bring up the car:
 
 ```bash
-roslaunch yahboomcar_bringup bringup.launch
+roslaunch yahboomcar_nav laser_bringup.launch
 ```
 
-2. Start the TG30:
-
-```bash
-roslaunch r2_tg30_race tg30_bringup.launch start_driver:=true
-```
-
-3. Make a map:
+2. Make a map:
 
 ```bash
 roslaunch r2_tg30_race mapping_cartographer.launch start_driver:=false scan_topic:=/scan obstacle_scan_topic:=/scan_obstacles
 ```
 
-4. Save the map:
+3. Save the map:
 
 ```bash
 rosrun map_server map_saver -f ~/yahboomcar_ws/src/r2_tg30_race/maps/driveway_course
 ```
 
-5. Stop Cartographer before switching to AMCL localization.
+4. Stop Cartographer before switching to AMCL localization.
 
-6. Record waypoints:
+5. Record waypoints:
 
 ```bash
 rosrun r2_tg30_race waypoint_extractor.py _yaml_file:=/home/$USER/yahboomcar_ws/src/r2_tg30_race/waypoints/waypoints.yaml
 ```
 
-7. For a loop, add the first waypoint to the end of the file.
+6. For a loop, add the first waypoint to the end of the file.
 
-8. Start AMCL localization if you want to drive on the saved map.
+7. Start AMCL localization if you want to drive on the saved map.
 
-9. Run the race stack:
+8. Run the race stack:
 
 ```bash
 roslaunch r2_tg30_race racing_stack.launch start_driver:=false scan_topic:=/scan obstacle_scan_topic:=/scan_obstacles waypoint_yaml:=/home/$USER/yahboomcar_ws/src/r2_tg30_race/waypoints/waypoints.yaml use_ackermann_bridge:=true
 ```
 
-10. Hold the deadman button and test slowly while watching `/auto_enable`, `/cmd_vel`, and `/ackermann_cmd`.
+9. Hold the deadman button and test slowly while watching `/auto_enable`, `/cmd_vel`, and `/ackermann_cmd`.
 
 If `view_racing.launch` is open, also watch the upper-right mode light:
 
@@ -720,8 +694,7 @@ If `view_racing.launch` is open, also watch the upper-right mode light:
 
 Current real-car recommendation:
 
-1. Use `yahboomcar_bringup bringup.launch` for base, odometry, and TF
-2. Use `r2_tg30_race tg30_bringup.launch` for the TG30 driver
-3. Use `mapping_cartographer.launch` for mapping
-4. Use `localization_amcl.launch` for saved-map localization
-5. Use `racing_stack.launch` for path driving
+1. Use `yahboomcar_nav laser_bringup.launch` for base, odometry, joystick, and LiDAR bringup
+2. Use `mapping_cartographer.launch` for mapping
+3. Use `localization_amcl.launch` for saved-map localization
+4. Use `racing_stack.launch` for path driving
