@@ -1,0 +1,19 @@
+pp_topic: /cmd_vel_auto
+ftg_topic: /cmd_vel_ftg_raw
+scan_topic: /scan_obstacles
+enable_topic: /auto_enable
+cmd_topic: /cmd_vel_safety
+# Sidewalk tuning:
+# start blending toward FTG sooner, slow down more near edges,
+# and use a wider front field of view so the robot treats grass borders
+# like barriers instead of clipping them.
+danger_distance: 1.10
+stop_distance: 0.45
+blend_distance: 1.60
+clear_path_speed_scale: 0.90
+danger_speed_scale: 0.25
+max_linear_x: 0.45
+max_angular_z: 1.60
+publish_hz: 25.0
+front_fov_deg: 110.0
+publish_zero_once_on_disable: true
