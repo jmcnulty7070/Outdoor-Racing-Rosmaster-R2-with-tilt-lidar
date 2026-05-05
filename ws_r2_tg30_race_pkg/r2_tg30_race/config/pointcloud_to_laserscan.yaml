@@ -1,0 +1,34 @@
+# pointcloud_to_laserscan.yaml
+# Converts the tilted-LiDAR PointCloud2 into a 2-D LaserScan that:
+#   1. Suppresses flat-ground returns (min_height > 0)
+#   2. Captures curb faces, grass edges, and low obstacles (max_height 0.28 m)
+#   3. Covers the full 360° so FTG and AMCL both see the sides/rear
+#
+# Height thresholds are in the target_frame (base_footprint = ground plane).
+# At 5° tilt, 0.1649 m mount height:
+#   Ground ring hits at ~1.89 m range → these land at z≈0 in base_footprint
+#   A 0.10 m curb face at 1.30 m range → z ≈ 0.10 m in base_footprint
+#   Grass tufts / edge vegetation → 0.03–0.15 m typical
+# So min_height=0.025 skips true ground while keeping all edge features.
+# max_height=0.28 keeps curb tops, low fencing, and tyre-level obstacles.
+
+target_frame: base_footprint   # height relative to ground plane (correct frame)
+transform_tolerance: 0.08
+
+# --- height slice (ground plane relative) ---
+min_height:  0.025   # skip flat ground returns; keep any feature >= 2.5 cm tall
+max_height:  0.280   # keep curb tops, grass clumps, low kerbing (≤28 cm)
+
+# --- angular coverage: full 360° so FTG sees lateral/rear threats too ---
+angle_min: -3.14159265
+angle_max:  3.14159265
+angle_increment: 0.00872665   # 0.5° resolution (matches TG30 native output)
+
+scan_time:  0.1429   # 1/7 Hz ≈ TG30 spin rate
+range_min:  0.12
+range_max:  12.0
+
+use_inf:    true
+inf_epsilon: 1.0
+
+concurrency_level: 1
