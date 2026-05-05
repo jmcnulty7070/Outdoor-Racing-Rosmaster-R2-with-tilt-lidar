@@ -1,0 +1,17 @@
+<launch>
+  <arg name="start_driver" default="false"/>
+  <arg name="port" default="/dev/ydlidar"/>
+  <arg name="baudrate" default="230400"/>
+  <arg name="frame_id" default="laser_link"/>
+  <arg name="base_frame" default="base_link"/>
+  <arg name="scan_topic" default="/scan"/>
+
+  <group if="$(arg start_driver)">
+    <node pkg="ydlidar_ros_driver" type="ydlidar_ros_driver_node" name="ydlidar_ros_driver" output="screen">
+      <param name="port" value="$(arg port)"/>
+      <param name="baudrate" value="$(arg baudrate)"/>
+      <param name="frame_id" value="$(arg frame_id)"/>
+      <remap from="/scan" to="$(arg scan_topic)"/>
+    </node>
+  </group>
+</launch>
