@@ -1,0 +1,20 @@
+# twist_mux.yaml
+# ==============
+# Both /cmd_vel_teleop (joystick) and /cmd_vel_auto_rm (autonomous)
+# are in ROSMASTER R2 format: linear.x=speed, linear.y=steer angle.
+# twist_mux picks the higher-priority active source and outputs /cmd_vel.
+#
+# Joystick teleop is always priority 90 — move the stick to override auto.
+
+topics:
+  - name: teleop
+    topic: /cmd_vel_teleop
+    timeout: 0.25
+    priority: 90
+
+  - name: auto
+    topic: /cmd_vel_auto_rm
+    timeout: 0.25
+    priority: 50
+
+locks: []

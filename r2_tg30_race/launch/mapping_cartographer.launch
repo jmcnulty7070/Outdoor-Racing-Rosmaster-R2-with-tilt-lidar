@@ -1,0 +1,35 @@
+<launch>
+  <!--
+    mapping_cartographer.launch
+    ===========================
+    Starts Cartographer SLAM for outdoor sidewalk/driveway mapping.
+
+    Prerequisites: laser_bringup.launch must already be running.
+    (laser_bringup starts the LiDAR, IMU, EKF, joystick, and scan pipeline.)
+
+    Usage:
+      roslaunch r2_tg30_race mapping_cartographer.launch
+  -->
+  <arg name="imu_topic"  default="/imu/imu_data"/>
+  <arg name="resolution" default="0.05"/>
+
+  <param name="/use_sim_time" value="false"/>
+
+  <!-- Cartographer SLAM.
+       Scan input : /scan_obstacles (curb/grass-aware, from laser_bringup)
+       IMU input  : /imu/imu_data   (EKF-fused, remapped to /imu below)
+       tracking_frame = imu_link (set in yahboomcar.lua) -->
+  <node name="cartographer_node" pkg="cartographer_ros"
+        type="cartographer_node"
+        args="-configuration_directory $(find yahboomcar_nav)/scripts
+              -configuration_basename yahboomcar.lua"
+        output="screen">
+    <remap from="scan" to="/scan_obstacles"/>
+    <remap from="/imu" to="$(arg imu_topic)"/>
+  </node>
+
+  <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
+        type="cartographer_occupancy_grid_node"
+        args="-resolution $(arg resolution)"
+        output="screen"/>
+</launch>

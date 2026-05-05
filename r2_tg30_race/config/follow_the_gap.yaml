@@ -1,0 +1,27 @@
+# follow_the_gap.yaml
+# FTG receives /scan_obstacles which is the full-360° derived LaserScan from
+# pointcloud_to_laserscan. Because that scan already has curb/grass returns
+# (min_height=0.025 m, max_height=0.28 m), FTG automatically treats sidewalk
+# edges and grass borders as obstacles – no extra configuration needed.
+#
+# Tuning for outdoor sidewalk racing:
+#   danger_distance : start reacting at 1.1 m (gives ~1.5 s at 0.7 m/s)
+#   stop_distance   : hard stop at 0.40 m
+#   front_angle_deg : 120° forward cone for gap selection
+#   bubble_radius_idx: inflate obstacles by ~14 beam widths (≈ robot half-width)
+#   gap_threshold   : minimum gap width to consider navigable (0.70 m)
+
+scan_topic:       /scan_obstacles
+cmd_topic:        /cmd_vel_ftg_raw
+
+danger_distance:   1.10   # m – begin FTG override above this distance
+stop_distance:     0.40   # m – publish zero twist if anything is closer
+
+front_angle_deg:   120.0  # degrees – gap search cone centred on robot heading
+bubble_radius_idx:  14    # beam-index radius around each obstacle point
+
+gap_threshold:     0.70   # m – gaps narrower than this are ignored
+
+max_speed:         0.40   # m/s – cap while FTG is active
+min_speed:         0.10   # m/s – minimum forward speed when a gap is found
+max_angular_z:     1.60   # rad/s
