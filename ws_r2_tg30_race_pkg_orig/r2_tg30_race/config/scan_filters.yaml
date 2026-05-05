@@ -1,0 +1,19 @@
+scan_filter_chain:
+  - name: range
+    type: laser_filters/LaserScanRangeFilter
+    params:
+      use_message_range_limits: false
+      # Keep slightly closer returns so curb/grass edges are not thrown away.
+      lower_threshold: 0.12
+      upper_threshold: 12.0
+      lower_replacement_value: .nan
+      upper_replacement_value: .nan
+
+  - name: shadows
+    type: laser_filters/ScanShadowsFilter
+    params:
+      # Use a lighter shadow filter so thin outdoor returns survive more often.
+      min_angle: 5.0
+      max_angle: 120.0
+      neighbors: 4
+      window: 1

@@ -1,0 +1,13 @@
+scan_topic: /scan_obstacles
+cmd_topic: /cmd_vel_ftg_raw
+# Sidewalk tuning:
+# react earlier to edge grass / curb returns and steer through the widest
+# remaining center gap instead of waiting until obstacles are very close.
+danger_distance: 1.10
+stop_distance: 0.45
+front_angle_deg: 110.0
+bubble_radius_idx: 14
+gap_threshold: 0.70
+max_speed: 0.40
+min_speed: 0.10
+max_angular_z: 1.60

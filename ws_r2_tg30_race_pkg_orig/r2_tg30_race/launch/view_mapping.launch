@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="rviz" type="rviz" name="rviz_mapping" output="screen"
+        args="-d $(find r2_tg30_race)/rviz/mapping.rviz"/>
+</launch>

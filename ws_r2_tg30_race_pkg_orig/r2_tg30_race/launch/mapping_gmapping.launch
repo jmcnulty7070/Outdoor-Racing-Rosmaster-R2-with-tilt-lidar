@@ -1,0 +1,11 @@
+<launch>
+  <!-- Backward-compatible alias: TG30 mapping now uses Cartographer instead of gmapping. -->
+  <arg name="start_driver" default="false"/>
+  <arg name="scan_topic" default="/scan"/>
+  <arg name="obstacle_scan_topic" default="/scan_obstacles"/>
+  <include file="$(find r2_tg30_race)/launch/mapping_cartographer.launch">
+    <arg name="start_driver" value="$(arg start_driver)"/>
+    <arg name="scan_topic" value="$(arg scan_topic)"/>
+    <arg name="obstacle_scan_topic" value="$(arg obstacle_scan_topic)"/>
+  </include>
+</launch>

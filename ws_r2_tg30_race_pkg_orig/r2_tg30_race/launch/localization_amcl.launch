@@ -1,0 +1,32 @@
+<launch>
+  <arg name="map_file" default="$(find r2_tg30_race)/maps/driveway_course.yaml"/>
+  <arg name="start_driver" default="false"/>
+  <arg name="scan_topic" default="/scan"/>
+  <arg name="obstacle_scan_topic" default="/scan_obstacles"/>
+
+  <include file="$(find r2_tg30_race)/launch/tg30_bringup.launch">
+    <arg name="start_driver" value="$(arg start_driver)"/>
+    <arg name="scan_topic" value="$(arg scan_topic)"/>
+  </include>
+
+  <include file="$(find r2_tg30_race)/launch/scan_cleanup.launch">
+    <arg name="scan_in" value="$(arg scan_topic)"/>
+    <arg name="scan_obstacles" value="$(arg obstacle_scan_topic)"/>
+  </include>
+
+  <node pkg="map_server" type="map_server" name="map_server" args="$(arg map_file)" />
+
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
+    <remap from="scan" to="$(arg obstacle_scan_topic)"/>
+    <param name="odom_frame_id" value="odom"/>
+    <param name="base_frame_id" value="base_link"/>
+    <param name="global_frame_id" value="map"/>
+    <param name="min_particles" value="200"/>
+    <param name="max_particles" value="800"/>
+    <param name="update_min_d" value="0.10"/>
+    <param name="update_min_a" value="0.10"/>
+    <param name="laser_z_hit" value="0.95"/>
+    <param name="laser_z_rand" value="0.05"/>
+    <param name="laser_max_beams" value="60"/>
+  </node>
+</launch>

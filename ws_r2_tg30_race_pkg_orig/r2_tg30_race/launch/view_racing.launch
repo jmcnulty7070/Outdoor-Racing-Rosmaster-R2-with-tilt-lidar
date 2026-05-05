@@ -1,0 +1,16 @@
+<launch>
+  <arg name="show_mode_indicator" default="true"/>
+  <node pkg="rviz" type="rviz" name="rviz_racing" output="screen"
+        args="-d $(find r2_tg30_race)/rviz/racing.rviz"/>
+
+  <node if="$(arg show_mode_indicator)"
+        pkg="r2_tg30_race"
+        type="mode_indicator.py"
+        name="mode_indicator"
+        output="screen">
+    <rosparam command="load" file="$(find r2_tg30_race)/config/steering_modifier.yaml" />
+    <param name="size_inches" value="2.0"/>
+    <param name="top_margin_px" value="16"/>
+    <param name="right_margin_px" value="16"/>
+  </node>
+</launch>
