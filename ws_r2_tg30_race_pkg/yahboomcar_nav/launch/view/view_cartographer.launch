@@ -1,4 +1,0 @@
-<launch>
-    <node name="rviz" pkg="rviz" type="rviz" required="true"
-          args="-d $(find yahboomcar_nav)/rviz/yahboomcar_cartograpther.rviz"/>
-</launch>
