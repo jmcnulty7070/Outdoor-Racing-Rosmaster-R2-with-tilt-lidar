@@ -1,0 +1,15 @@
+Copy apply_fixes.sh into the repo root alongside ws_r2_tg30_race_pkg/, then run:
+
+cd /path/to/Outdoor-Racing-Rosmaster-R2-with-tilt-lidar-main
+bash apply_fixes.sh
+
+cd ws_r2_tg30_race_pkg
+catkin_make
+source devel/setup.bash
+What the script does internally
+It uses two mechanisms:
+For modified files (20 files that existed in the original but changed) — it applies a standard unified patch. This means only the actual lines that changed are touched. Everything else in those files is left exactly as the original had it.
+For new files (19 files that didn't exist in the original at all — the new Python scripts, racing.rviz, README.md, waypoints.yaml, etc.) — it decodes base64-embedded file content directly. This avoids all heredoc quoting problems with Python single-quotes, backslashes, and special characters.
+The script checks you're in the right directory before doing anything, and makes all Python scripts executable at the end.
+
+
